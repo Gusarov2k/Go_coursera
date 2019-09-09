@@ -12,8 +12,8 @@ const TH = 6
 
 var ExecutePipeline = func(jobs ...job) {
 
-	wg := &sync.WaitGroup{}
 	in := make(chan interface{})
+	wg := &sync.WaitGroup{}
 
 	for _, job := range jobs {
 
@@ -37,20 +37,20 @@ func jobWorker(job job, in, out chan interface{}, wg *sync.WaitGroup) {
 
 var SingleHash = func(in, out chan interface{}) {
 
-	mu := &sync.Mutex{}
 	wg := &sync.WaitGroup{}
+	mu := &sync.Mutex{}
 
 	for i := range in {
 
 		wg.Add(1)
 
-		go singleHashWorker(i, out, wg, mu)
+		go oneHashWorker(i, out, wg, mu)
 	}
 
 	wg.Wait()
 }
 
-func singleHashWorker(in interface{}, out chan interface{}, wg *sync.WaitGroup, mu *sync.Mutex) {
+func oneHashWorker(in interface{}, out chan interface{}, wg *sync.WaitGroup, mu *sync.Mutex) {
 
 	defer wg.Done()
 
